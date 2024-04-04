@@ -32,4 +32,13 @@ export class TodoService {
   async remove(id: number): Promise<void> {
     await this.todoRepository.delete(id);
   }
+
+  async toggleEdit(id: number): Promise<Todo> {
+    const todo = await this.todoRepository.findOne({ where: { id } });
+    if (!todo) {
+      throw new Error('Todo not found');
+    }
+    todo.done = !todo.done; // Chuyển đổi trạng thái chỉnh sửa
+    return this.todoRepository.save(todo);
+  }
 }
